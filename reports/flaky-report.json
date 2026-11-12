@@ -1,0 +1,42 @@
+[
+  {
+    "test": "behaviours.spec.ts > stable: always passes",
+    "runs": 20,
+    "fail %": 0,
+    "passed on retry": 0,
+    "median ms": 6,
+    "max ms": 7,
+    "verdict": "stable",
+    "spikes": "no"
+  },
+  {
+    "test": "behaviours.spec.ts > flaky: fails about 30% of the time",
+    "runs": 20,
+    "fail %": 50,
+    "passed on retry": 9,
+    "median ms": 1,
+    "max ms": 2,
+    "verdict": "flaky",
+    "spikes": "no"
+  },
+  {
+    "test": "behaviours.spec.ts > broken: always fails",
+    "runs": 20,
+    "fail %": 100,
+    "passed on retry": 0,
+    "median ms": 2,
+    "max ms": 9,
+    "verdict": "broken",
+    "spikes": "no"
+  },
+  {
+    "test": "behaviours.spec.ts > sometimes slow: takes longer about 20% of the time",
+    "runs": 20,
+    "fail %": 0,
+    "passed on retry": 0,
+    "median ms": 71,
+    "max ms": 1518,
+    "verdict": "stable",
+    "spikes": "yes"
+  }
+]

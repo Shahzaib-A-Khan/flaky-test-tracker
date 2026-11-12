@@ -1,0 +1,43 @@
+name: Flaky Test Tracker
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  track:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - run: npm ci
+      - name: Run the sample suite 20 times and save each result
+        run: |
+          rm -rf data/runs
+          mkdir -p data/runs
+          for i in $(seq 1 20); do
+            npx playwright test || true
+            cp data/latest.json "data/runs/run-$i.json"
+          done
+      - name: Analyze
+        run: node scripts/analyze.js
+      - name: Show the report in the run summary
+        run: cat reports/flaky-report.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Verify the tracker classifies the sample tests correctly
+        run: node scripts/verify.js
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: flaky-report
+          path: |
+            reports/
+            data/runs/
+          retention-days: 14
